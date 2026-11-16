@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Billbo prototype</title><link rel="stylesheet" href="/style.css"></head><body>
+<main>
+<h1>Billbo: no more bag of bills</h1>
+<p class="sub">A working prototype of the idea. Three screens show the three people in the story.</p>
+<div class="grid g3">
+  <a class="card" href="/chat" style="text-decoration:none;color:inherit"><h2>1. Owner chat</h2><p>The shop owner's WhatsApp-style chat with Billbo. Send sample bill photos, voice notes and notices, and watch the agents answer.</p></a>
+  <a class="card" href="/dashboard" style="text-decoration:none;color:inherit"><h2>2. Accountant dashboard</h2><p>The accountant sees every client sorted and checked, a review queue, a filing-ready pack, and what Billbo costs him.</p></a>
+  <a class="card" href="/portal" style="text-decoration:none;color:inherit"><h2>3. Mock GST portal</h2><p>A stand-in for the government portal. Suppliers report invoices here, and a human files. Billbo never does.</p></a>
+</div>
+<h2 style="margin-top:26px">Try this 2-minute demo</h2>
+<div class="card"><ol style="margin:0;padding-left:20px">
+<li>Open <a href="/chat">Owner chat</a> as Ramesh (Billbo Plus). Send the bill <b>Mahadev Plastics, MP-2231</b>. Billbo saves it and warns that the credit is at risk. Reply <b>yes</b> to get a supplier reminder.</li>
+<li>Send the <b>blurry</b> bill. Billbo asks before guessing. Reply <b>yes</b>.</li>
+<li>Send the voice note <b>order going to Pune</b>, then type a vehicle number such as <b>KA19AB1234</b>.</li>
+<li>Open the <a href="/portal">Mock GST portal</a> and click <b>Supplier reports this invoice</b>. Go back to the chat: Billbo says the credit is now safe.</li>
+<li>Open the <a href="/dashboard">Accountant dashboard</a>: the month is sorted, with a review queue and a downloadable pack.</li>
+<li>Switch the chat to <b>Fathima</b> (Free plan) and send the same bill to see how the paid features are held back.</li>
+</ol></div>
+<p style="margin-top:18px"><button class="ghost" id="reset">Reset demo data</button> <span class="muted" id="msg"></span></p>
+<div class="note">What is simulated: bill photos and voice notes are samples standing in for a vision and speech model, the chat stands in for WhatsApp, and the portal is a mock. What is real: the six agents, the routing, the rule engine, the credit matching, the plan limits and the audit trail.</div>
+</main>
+<script src="/common.js"></script><script>
+topbar("/");
+$("#reset").onclick = async () => { await api("/api/reset", {}); $("#msg").textContent = "Demo data reloaded."; };
+</script></body></html>

@@ -13,41 +13,42 @@ Every small trader has a bag of bills waiting for the accountant. Billbo empties
 
 **Detailed explanation of the idea**
 
+WHAT BILLBO IS
+Billbo is a team of AI agents that lives inside WhatsApp and does a micro business's GST paperwork as it happens, not at month end. The owner sends a bill photo or a voice note in Kannada, Hindi or English. Billbo does the rest and hands the accountant a filing-ready pack. Billbo prepares; it never files.
+
 THE PROBLEM
-Micro enterprises just above the GST threshold pay Rs 1,500-3,000 per filing and lose 15-20 hours a month to paperwork. Bills pile up in a bag or a WhatsApp chat, e-way bills are made at the last minute, and the first sign of trouble is often a notice. Input credit now flows only from what suppliers report (GSTR-2B and the Invoice Management System), so one careless supplier quietly costs the owner real money.
+Micro enterprises just above the GST threshold pay Rs 1,500-3,000 per filing and lose 15-20 hours a month to paperwork. Bills pile up in a bag or a WhatsApp chat, e-way bills are made at the last minute, and the first sign of trouble is often a notice. Input credit now depends on what suppliers report (GSTR-2B and the Invoice Management System), so one careless supplier quietly costs the owner real money.
 
 A DAY WITH BILLBO
-Ramesh runs a plastics trading shop in Hubballi. At 11 am he photographs a purchase bill and forwards it to Billbo. In seconds: "Saved. Mahadev Plastics, Rs 40,120." At 4 pm he sends a voice note in Kannada about a Rs 74,500 order going to Pune. Billbo replies: "This needs an e-way bill. Draft is ready, send the vehicle number." On the 12th Billbo warns: "Mahadev Plastics has not reported two invoices. Rs 8,280 of your credit is at risk. Shall I draft a reminder?" On the 18th his accountant opens a dashboard where Ramesh's month is already sorted and reconciled, and Ramesh gets a 60-second voice note explaining what he is about to sign.
+Ramesh runs a plastics trading shop. At 11 am he forwards a photo of a purchase bill. Billbo replies: "Saved. Mahadev Plastics, Rs 40,120." At 4 pm he sends a voice note about a Rs 74,500 order going to Pune. Billbo: "This needs an e-way bill. Draft is ready, send the vehicle number." On the 12th: "Mahadev Plastics has not reported two invoices. Rs 8,280 of your credit is at risk. Shall I draft a reminder?" On the 18th his accountant opens a dashboard where the month is already sorted and reconciled, and Ramesh gets a 60-second voice note explaining what he is about to sign.
 
-HOW IT WORKS: SIX AGENTS, ONE ORCHESTRATOR
-1. Intake Agent: reads bill photos, PDFs and voice notes; extracts GSTIN, invoice number, HSN, value and tax; checks the arithmetic; asks one short voice question when unsure instead of guessing.
-2. Ledger Agent: posts each bill to sales and purchase registers the same day.
-3. ITC Guard Agent: matches purchases against supplier filings, shows rupees of credit at risk, drafts supplier reminders, and builds a Supplier Scorecard showing which suppliers file on time, so the owner knows whom it is safe to buy from.
-4. Dispatch Agent: when a sale crosses the e-way bill limit for that route, prepares the draft and checks documents before the truck leaves.
-5. Return and Deadline Agent: tracks GSTR-1, GSTR-3B and TDS dates, drafts return summaries, and explains them by voice.
-6. Notice Helper Agent: the owner photographs a notice; Billbo explains what it means, how urgent it is, and prepares the papers the accountant will need.
-The orchestrator routes each message, keeps an audit trail of every decision, and sends low-confidence items to the accountant.
+HOW IT WORKS
+Six agents, coordinated by an orchestrator that logs every decision and sends doubtful items to the accountant:
+1. Intake: reads bill photos, PDFs and voice notes, checks the arithmetic, and asks one short question when unsure instead of guessing.
+2. Ledger: posts each bill to the sales and purchase registers the same day.
+3. ITC Guard: matches purchases with supplier filings, shows the rupees of credit at risk, drafts supplier reminders, and keeps a Supplier Scorecard of who files on time.
+4. Dispatch: prepares the e-way bill draft and checks documents before the truck leaves.
+5. Returns and Deadlines: tracks GSTR-1, GSTR-3B and TDS dates, drafts return summaries and explains them by voice.
+6. Notice Helper: explains a photographed notice in plain language and gathers the papers the accountant needs.
 
-WHY IT STAYS CORRECT WHEN RULES CHANGE
-The AI reads, routes and explains. It never calculates tax. Every rate, limit and due date comes from a deterministic rule engine made of versioned "rule cards", each with its source and effective date. A rule change is a one-card update, and affected owners get a plain-language voice alert. We have already built and tested this core (rule cards, credit reconciliation, e-way check) on synthetic data.
-
-THE LINE WE DO NOT CROSS
-Billbo prepares, it never files. Filing stays with the owner or a professional and is simulated on our mock GST portal during the hackathon. Anything that leaves the chat needs the owner's approval.
+HOW IT STAYS CORRECT AND SAFE
+- The AI reads, routes and explains, but never calculates tax. Every rate, limit and due date comes from a deterministic rule engine built from versioned "rule cards", each with its source and effective date. A rule change is a one-card update plus a plain-language alert to affected owners.
+- Filing stays with the owner or a professional, and is simulated on our mock GST portal in the hackathon.
+- Anything that leaves the chat needs the owner's approval.
+We have already built and tested this core (rule cards, credit reconciliation, e-way check) on synthetic data.
 
 BUILT FOR BHARAT
-No new app to learn. Voice-first, vernacular, works on a low-cost Android phone, light on data, and asynchronous so patchy networks do not break it.
-
-WHY NOT EXISTING APPS
-Billing and accounting apps expect the owner to type entries into software. Our user will not. Billbo needs zero data entry, lives where the bills already are, and is designed to make the accountant faster instead of replacing him.
-
-TECH STACK
-Lyzr agents for orchestration, a vision LLM for bill reading, Indian-language speech (Bhashini / open ASR-TTS), Python rule engine, FastAPI + PostgreSQL, WhatsApp Cloud API, accountant web dashboard, mock GST and e-way bill sandbox.
+No new app, no typing, no English needed. Voice-first, works on a low-cost Android phone, light on data, and asynchronous so patchy networks do not break it. Existing billing apps expect the owner to enter data; Billbo needs none.
 
 BUSINESS MODEL
-We sell through accountants, not against them: sorted, reconciled books let one accountant carry more clients, so he brings us his whole client list. Target price Rs 199-299 per business per month, well below one filing fee. India has about 1.67 crore active GST registrations (June 2026), roughly three in four of them proprietorships. Later: with consent, a verified compliance record that helps the owner get credit from MSME lenders.
+The owner uses Billbo; the accountant pays for it.
+1. Free for owners: bill capture, registers and reminders, so there is no barrier to starting.
+2. Accountant plan, our main revenue: a target of Rs 99 per client per month. Sorted, reconciled books let him serve more clients in the same hours, and he already earns Rs 1,500-3,000 per filing, so the fee pays for itself.
+3. Billbo Plus for owners: a target of Rs 149 per month for credit alerts, e-way drafts and notice help, sold by showing the rupees of credit protected that month.
+One accountant brings his whole client list, so we grow accountant by accountant, starting in Mangaluru near our campus. Later, with consent, a verified compliance record can help owners get loans, with a referral fee from lenders. The market is about 1.67 crore active GST registrations (June 2026), roughly three in four of them proprietorships. Prices are targets we will test in field interviews.
 
-WHAT WE WILL MEASURE
-Hours of paperwork per month, input credit saved, late fees avoided, consignments held, clients per accountant.
+TECH STACK
+Lyzr agents, a vision LLM for bill reading, Indian-language speech (Bhashini / open ASR-TTS), Python rule engine, FastAPI and PostgreSQL, WhatsApp Cloud API, an accountant web dashboard, and a mock GST and e-way bill sandbox.
 
-PROTOTYPE PLAN
-Week 1: bill intake and registers on WhatsApp. Week 2: ITC Guard, Supplier Scorecard and e-way drafts on the mock portal. Week 3: return pack, Notice Helper, accountant dashboard, and a field test with local traders and an accountant.
+PLAN AND IMPACT
+Week 1: bill intake and registers on WhatsApp. Week 2: ITC Guard, Supplier Scorecard and e-way drafts on the mock portal. Week 3: return pack, Notice Helper, accountant dashboard and a field test with local traders and an accountant. We will measure hours of paperwork per month (target: 15-20 down to under 3), input credit saved, late fees avoided, consignments held, and clients per accountant.

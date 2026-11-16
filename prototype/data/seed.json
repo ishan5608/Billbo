@@ -1,0 +1,22 @@
+{
+  "period": "October 2026",
+  "accountant": {"name": "Suresh Rao & Associates (demo)"},
+  "owners": [
+    {"name": "Ramesh", "business": "Ramesh Plastics Trading", "gstin": "29RAMES1234R1Z8", "lang": "en", "plan": "plus"},
+    {"name": "Fathima", "business": "Fathima General Stores", "gstin": "29FATHI5678F1Z1", "lang": "en", "plan": "free"},
+    {"name": "Girish", "business": "Girish Transport", "gstin": "29GIRIS4321G1Z6", "lang": "en", "plan": "free"}
+  ],
+  "customers": [
+    {"name": "Pune Polymers", "alias": "pune", "gstin": "27PUNEP1234P1Z2"},
+    {"name": "Hubli Hardware", "alias": "hubli", "gstin": "29HUBLI1234H1Z7"},
+    {"name": "Mysuru Mart", "alias": "mysuru", "gstin": "29MYSUR5678M1Z4"}
+  ],
+  "opening_bills": [
+    {"direction": "purchase", "party": "Sri Lakshmi Traders", "party_gstin": "29ABCDE1234F1Z5", "invoice": "SLT/101", "date": "2026-10-03", "taxable": 42000, "gst": 7560}
+  ],
+  "gstr2b": [
+    {"gstin": "29ABCDE1234F1Z5", "invoice": "SLT/101", "taxable": 42000, "gst": 7560},
+    {"gstin": "29ABCDE1234F1Z5", "invoice": "SLT/117", "taxable": 18500, "gst": 3330},
+    {"gstin": "27LMNOP4321Q1Z9", "invoice": "BP/88", "taxable": 25000, "gst": 3000}
+  ]
+}

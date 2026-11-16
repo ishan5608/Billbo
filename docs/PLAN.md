@@ -22,9 +22,11 @@ Team size 1–4. Judged on technical merit and entrepreneurial potential. Prizes
 
 ## Phase 1: prototype, 23 Nov – 15 Dec
 
+A first prototype already runs (`prototype/`, see README): simulated chat, six agents, accountant dashboard, mock portal and the three plans. The weeks below replace its simulated parts with real ones.
+
 **Week 1 (23–29 Nov): capture and books**
-- WhatsApp webhook + FastAPI gateway (use WhatsApp Cloud API test number)
-- Intake Agent: bill photo → structured JSON, GSTIN and arithmetic validation
+- Connect the prototype's orchestrator to a real WhatsApp Cloud API test number (replace the simulated chat)
+- Intake Agent: replace sample bills with a real vision model in `read_photo()`; keep the validation
 - Ledger Agent: sales / purchase registers in PostgreSQL
 - 30 synthetic bills (printed, handwritten, blurry) as a test set; track extraction accuracy
 

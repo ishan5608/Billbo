@@ -1,0 +1,20 @@
+{
+  "bills": [
+    {"id": "b1", "label": "Purchase bill: Sri Lakshmi Traders, SLT/117", "direction": "purchase", "party": "Sri Lakshmi Traders", "party_gstin": "29ABCDE1234F1Z5", "invoice": "SLT/117", "date": "2026-10-06", "taxable": 18500, "gst": 3330, "confidence": 0.98, "unclear": null},
+    {"id": "b2", "label": "Purchase bill: Mahadev Plastics, MP-2231", "direction": "purchase", "party": "Mahadev Plastics", "party_gstin": "29PQRSX5678K1Z2", "invoice": "MP-2231", "date": "2026-10-08", "taxable": 34000, "gst": 6120, "confidence": 0.97, "unclear": null},
+    {"id": "b3", "label": "Purchase bill (blurry photo): Mahadev Plastics, MP-2260", "direction": "purchase", "party": "Mahadev Plastics", "party_gstin": "29PQRSX5678K1Z2", "invoice": "MP-2260", "date": "2026-10-15", "taxable": 12000, "gst": 2160, "confidence": 0.58, "unclear": "gst"},
+    {"id": "b4", "label": "Purchase bill: Balaji Packaging (Maharashtra), BP/88", "direction": "purchase", "party": "Balaji Packaging", "party_gstin": "27LMNOP4321Q1Z9", "invoice": "BP/88", "date": "2026-10-19", "taxable": 25000, "gst": 4500, "confidence": 0.96, "unclear": null},
+    {"id": "b5", "label": "Purchase bill with a wrong total: Kaveri Tools, KT-19", "direction": "purchase", "party": "Kaveri Tools", "party_gstin": "29KLMNO9876P1Z3", "invoice": "KT-19", "date": "2026-10-21", "taxable": 10000, "gst": 2100, "confidence": 0.95, "unclear": null},
+    {"id": "s1", "label": "Sales invoice: Hubli Hardware, INV-501", "direction": "sale", "party": "Hubli Hardware", "party_gstin": "29HUBLI1234H1Z7", "invoice": "INV-501", "date": "2026-10-10", "taxable": 30000, "gst": 5400, "confidence": 0.99, "unclear": null},
+    {"id": "s2", "label": "Sales invoice: Mysuru Mart, INV-503", "direction": "sale", "party": "Mysuru Mart", "party_gstin": "29MYSUR5678M1Z4", "invoice": "INV-503", "date": "2026-10-22", "taxable": 50000, "gst": 9000, "confidence": 0.99, "unclear": null}
+  ],
+  "voice": [
+    {"id": "v1", "label": "Voice note: order going to Pune", "text": "74,500 rupees order going to Pune Polymers tomorrow"},
+    {"id": "v2", "label": "Voice note: is my credit safe?", "text": "Is my credit safe this month?"},
+    {"id": "v3", "label": "Voice note: what am I signing?", "text": "What am I signing this month?"}
+  ],
+  "notices": [
+    {"id": "n1", "label": "Notice photo: form DRC-01C", "form": "DRC-01C"},
+    {"id": "n2", "label": "Notice photo: form ASMT-10", "form": "ASMT-10"}
+  ]
+}

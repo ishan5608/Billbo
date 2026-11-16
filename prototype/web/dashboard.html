@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accountant dashboard · Billbo</title><link rel="stylesheet" href="/style.css"></head><body>
+<main>
+<h1 id="acc">Accountant dashboard</h1><p class="sub" id="period"></p>
+<div class="grid g4" id="bill"></div>
+<h2 style="margin-top:22px">Clients</h2>
+<div class="card"><table><thead><tr><th>Client</th><th>Plan</th><th class="r">Bills</th><th class="r">To review</th><th class="r">Credit at risk</th><th class="r">Open items</th><th>Status</th></tr></thead><tbody id="clients"></tbody></table></div>
+<div id="detail" style="margin-top:22px"></div>
+</main>
+<script src="/common.js"></script><script>
+topbar("/dashboard");
+let current = Number(qs("client") || 0);
+async function load() {
+  const d = await api("/api/dashboard"), b = d.billing;
+  $("#acc").textContent = d.accountant.name; $("#period").textContent = "Return period: " + d.period + ". Every client below arrives sorted and checked by Billbo.";
+  $("#bill").innerHTML = [[b.clients, "clients on Billbo"], [inr(b.accountant_fee) + " / month", `your Billbo fee (${b.clients} × ${inr(b.price_accountant)}, target price)`],
+    [b.plus_clients, `clients on Billbo Plus (${inr(b.price_plus)} each, paid by them)`], [inr(b.total) + " / month", "Billbo's revenue from this practice"]]
+    .map(([n, l]) => `<div class="card"><div class="num">${n}</div><div class="lbl">${l}</div></div>`).join("");
+  $("#clients").innerHTML = d.clients.map(c => `<tr class="pick ${c.id === current ? "sel" : ""}" data-id="${c.id}"><td><b>${esc(c.business)}</b><br><span class="muted">${esc(c.name)}</span></td>
+    <td><span class="pill ${c.plan}">${c.plan === "plus" ? "Plus" : "Free"}</span></td><td class="r">${c.bills}</td><td class="r">${c.review || "–"}</td>
+    <td class="r ${c.at_risk ? "risk" : ""}">${c.at_risk ? inr(c.at_risk) : "–"}</td><td class="r">${c.open_items || "–"}</td>
+    <td>${c.bills === 0 ? '<span class="pill free">No bills yet</span>' : c.ready ? '<span class="pill ok">Ready to check and file</span>' : '<span class="pill warn">Needs your review</span>'}</td></tr>`).join("");
+  document.querySelectorAll("tr.pick").forEach(r => r.onclick = () => { current = Number(r.dataset.id); load(); });
+  if (!current && d.clients.length) current = d.clients[0].id;
+  if (current) detail();
+}
+const reg = rows => rows.length ? `<table><thead><tr><th>Date</th><th>Party</th><th>Invoice</th><th class="r">Taxable</th><th class="r">GST</th><th>Route</th><th>Status</th></tr></thead><tbody>${rows.map(b =>
+  `<tr><td>${esc(b.date)}</td><td>${esc(b.party)}</td><td>${esc(b.invoice)}</td><td class="r">${inr(b.taxable)}</td><td class="r">${inr(b.gst)}</td><td>${b.route === "inter" ? "Other state" : "Within state"}</td><td>${b.status === "posted" ? "Posted" : '<span class="risk">Needs review</span>'}</td></tr>`).join("")}</tbody></table>` : '<p class="muted">Nothing yet.</p>';
+async function detail() {
+  const d = await api("/api/client?owner_id=" + current), s = d.summary;
+  const drafts = d.drafts.map(x => { const p = x.payload;
+    const what = x.kind === "eway" ? `E-way draft: ${esc(p.buyer)}, ${inr(p.value)}${p.vehicle ? ", vehicle " + esc(p.vehicle) : ""}${p.simulated_number ? ", no. " + esc(p.simulated_number) : ""}`
+      : x.kind === "supplier_reminder" ? `Supplier reminder for ${esc(p.supplier)}` : `Notice ${esc(p.form)}: ${esc(p.title)} (reply in ${p.reply_days} days). Papers: ${p.papers.map(esc).join("; ")}`;
+    return `<tr><td>${what}</td><td>${esc(x.status.replace(/_/g, " "))}</td></tr>`; }).join("");
+  $("#detail").innerHTML = `<h2>${esc(d.owner.business)} <span class="muted" style="font-weight:400">· GSTIN ${esc(d.owner.gstin)}</span></h2>
+  <div class="grid g4">
+    <div class="card"><div class="num">${inr(s.output_tax)}</div><div class="lbl">GST collected on ${s.sales_invoices} sales invoice(s)</div></div>
+    <div class="card"><div class="num">${inr(s.itc_safe)}</div><div class="lbl">input credit safe to claim</div></div>
+    <div class="card"><div class="num ${s.itc_at_risk ? "risk" : ""}">${inr(s.itc_at_risk)}</div><div class="lbl">input credit at risk</div></div>
+    <div class="card"><div class="num">${inr(s.net_payable)}</div><div class="lbl">draft GST payable for ${esc(s.period)}</div></div>
+  </div>
+  <p style="margin:14px 0"><a href="/api/pack.csv?owner_id=${current}"><button>Download filing-ready pack (CSV)</button></a>
+    <a href="/portal?client=${current}"><button class="ghost">Open in mock GST portal</button></a> <a href="/chat?owner=${current}"><button class="ghost">See the owner's chat</button></a></p>
+  ${d.review.length ? `<div class="card" style="border-color:var(--red)"><h3>Review queue: Billbo was not sure about these</h3><table><tbody>${d.review.map(b =>
+    `<tr><td><b>${esc(b.party)}</b> ${esc(b.invoice)}<br><span class="muted">${JSON.parse(b.problems).map(esc).join("; ")}</span></td><td class="r">Taxable ${inr(b.taxable)}</td>
+     <td>GST <input type="text" size="7" value="${b.gst}" id="g${b.id}"></td><td><button class="small" data-bill="${b.id}">Accept</button></td></tr>`).join("")}</tbody></table></div>` : ""}
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Purchase register</h3>${reg(d.purchases)}</div>
+    <div class="card"><h3>Sales register</h3>${reg(d.sales)}</div>
+    <div class="card"><h3>Input credit check</h3>${d.credit.issues.length ? `<table><tbody>${d.credit.issues.map(i => `<tr><td><b>${esc(i.supplier)}</b> ${esc(i.invoice)}<br><span class="muted">${esc(i.reason)}</span></td><td class="r risk">${inr(i.at_risk)}</td></tr>`).join("")}</tbody></table>` : '<p class="muted">Every purchase bill matches what suppliers reported.</p>'}
+      <h3 style="margin-top:12px">Supplier scorecard</h3>${d.scorecard.length ? `<table><tbody>${d.scorecard.map(c => `<tr><td>${esc(c.supplier)}</td><td class="r">${c.reported_ok} of ${c.invoices} reported</td><td class="r"><span class="pill ${c.score === 100 ? "ok" : "warn"}">${c.score}%</span></td></tr>`).join("")}</tbody></table>` : '<p class="muted">No purchases yet.</p>'}</div>
+    <div class="card"><h3>Drafts and alerts</h3>${drafts ? `<table><tbody>${drafts}</tbody></table>` : '<p class="muted">None.</p>'}
+      <h3 style="margin-top:12px">Filings (simulated, by a person)</h3>${d.filings.length ? d.filings.map(f => `<div>${esc(f.return_type)} for ${esc(f.period)}, filed by ${esc(f.filed_by)}</div>`).join("") : '<p class="muted">Nothing filed yet. Billbo never files.</p>'}</div>
+  </div>
+  <div class="card" style="margin-top:14px"><h3>Audit trail (latest 40 decisions)</h3><table><tbody>${d.audit.map(a => `<tr><td class="muted" style="white-space:nowrap">${new Date(a.ts * 1000).toLocaleTimeString()}</td><td><b>${esc(a.agent)}</b></td><td>${esc(a.action)}</td><td class="muted">${esc(a.detail)}</td></tr>`).join("")}</tbody></table></div>`;
+  document.querySelectorAll("button[data-bill]").forEach(b => b.onclick = async () => { await api("/api/review", { bill_id: Number(b.dataset.bill), gst: $("#g" + b.dataset.bill).value }); load(); });
+}
+load();
+</script></body></html>

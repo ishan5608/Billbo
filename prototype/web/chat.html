@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Owner chat · Billbo</title><link rel="stylesheet" href="/style.css"></head><body>
+<main><div class="chatwrap">
+  <div class="side">
+    <div class="card">
+      <h3>Who is chatting</h3>
+      <div class="row"><select id="owner"></select></div>
+      <div class="row" style="margin-top:10px"><span class="lbl">Plan</span> <span id="plan"></span> <button class="small ghost" id="toggle"></button></div>
+      <div class="row" style="margin-top:10px"><span class="lbl">Language</span>
+        <select id="lang"><option value="en">English</option><option value="hi">Hindi</option><option value="kn">Kannada</option></select></div>
+    </div>
+    <div class="card samples"><h3>Send a bill photo</h3><div id="bills"></div></div>
+    <div class="card samples"><h3>Send a voice note</h3><div id="voice"></div></div>
+    <div class="card samples"><h3>Send a notice photo</h3><div id="notices"></div></div>
+    <div class="note">Photos and voice notes are samples. Try typing: credit, suppliers, due, summary, plan, upgrade.</div>
+  </div>
+  <div class="phone">
+    <div class="who"><span id="title">Billbo</span></div>
+    <div class="msgs" id="msgs"></div>
+    <form class="compose" id="form"><input type="text" id="text" placeholder="Type a message" autocomplete="off" maxlength="300"><button>Send</button></form>
+  </div>
+</div></main>
+<script src="/common.js"></script><script>
+topbar("/chat");
+let owner = Number(qs("owner") || localStorage.getItem("billbo_owner") || 1), last = 0, busy = false;
+async function loadOwners() {
+  const os = await api("/api/owners");
+  if (!os.some(o => o.id === owner)) owner = os[0].id;
+  $("#owner").innerHTML = os.map(o => `<option value="${o.id}" ${o.id === owner ? "selected" : ""}>${esc(o.name)} · ${esc(o.business)}</option>`).join("");
+}
+function showOwner(o) {
+  $("#plan").innerHTML = `<span class="pill ${o.plan}">${o.plan === "plus" ? "Billbo Plus" : "Free"}</span>`;
+  $("#toggle").textContent = o.plan === "plus" ? "Switch to Free" : "Upgrade to Plus";
+  $("#toggle").dataset.to = o.plan === "plus" ? "free" : "plus";
+  $("#lang").value = o.lang; $("#title").textContent = "Billbo · chat with " + o.name;
+}
+async function poll() {
+  if (busy) return; busy = true;
+  try {
+    const d = await api(`/api/messages?owner_id=${owner}&after=${last}`);
+    showOwner(d.owner);
+    for (const m of d.messages) {
+      last = Math.max(last, m.id);
+      $("#msgs").insertAdjacentHTML("beforeend", `<div class="b ${m.sender}">${m.sender === "billbo" && m.agent ? `<span class="ag">${esc(m.agent)}</span>` : ""}${esc(m.text)}</div>`);
+    }
+    if (d.messages.length) $("#msgs").scrollTop = $("#msgs").scrollHeight;
+  } catch (e) { console.log(e); } finally { busy = false; }
+}
+async function send(kind, text, sample_id) { await api("/api/send", { owner_id: owner, kind, text, sample_id }); poll(); }
+async function init() {
+  await loadOwners();
+  const s = await api("/api/samples");
+  const btn = (kind, x) => `<button data-kind="${kind}" data-id="${x.id}" data-text="${esc(x.text || "")}">${esc(x.label)}</button>`;
+  $("#bills").innerHTML = s.bills.map(x => btn("bill", x)).join("");
+  $("#voice").innerHTML = s.voice.map(x => btn("voice", x)).join("");
+  $("#notices").innerHTML = s.notices.map(x => btn("notice", x)).join("");
+  document.querySelectorAll(".samples button").forEach(b => b.onclick = () => send(b.dataset.kind, b.dataset.text, b.dataset.id));
+  $("#owner").onchange = e => { owner = Number(e.target.value); localStorage.setItem("billbo_owner", owner); last = 0; $("#msgs").innerHTML = ""; poll(); };
+  $("#toggle").onclick = async e => { await api("/api/owner", { owner_id: owner, plan: e.target.dataset.to }); poll(); };
+  $("#lang").onchange = async e => { await api("/api/owner", { owner_id: owner, lang: e.target.value }); poll(); };
+  $("#form").onsubmit = e => { e.preventDefault(); const t = $("#text").value.trim(); if (t) { $("#text").value = ""; send("text", t); } };
+  poll(); setInterval(poll, 2000);
+}
+init();
+</script></body></html>

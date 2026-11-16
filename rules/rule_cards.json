@@ -1,12 +1,120 @@
 {
   "_note": "Illustrative rule cards for the hackathon demo. Every card must be reviewed by a practising accountant before real use.",
   "cards": [
-    {"id": "EWB-INTER", "title": "E-way bill limit, inter-state", "value": 50000, "unit": "INR consignment value", "source": "CGST Rules, Rule 138(1)", "effective_from": "2018-04-01"},
-    {"id": "EWB-INTRA-KA", "title": "E-way bill limit, within Karnataka", "value": 50000, "unit": "INR consignment value", "source": "Karnataka state notification (verify current)", "effective_from": "2018-04-01"},
-    {"id": "DUE-GSTR1", "title": "GSTR-1 due day (monthly filer)", "value": 11, "unit": "day of next month", "source": "CGST Act s.37 and notifications", "effective_from": "2017-07-01"},
-    {"id": "GEN-GSTR2B", "title": "GSTR-2B generated", "value": 14, "unit": "day of next month", "source": "GSTN advisory", "effective_from": "2020-08-01"},
-    {"id": "DUE-GSTR3B", "title": "GSTR-3B due day (monthly filer)", "value": 20, "unit": "day of next month", "source": "CGST Act s.39 and notifications", "effective_from": "2017-07-01"},
-    {"id": "DUE-TDS", "title": "TDS deposit due day", "value": 7, "unit": "day of next month", "source": "Income-tax Rules, Rule 30", "effective_from": "2010-04-01"},
-    {"id": "LATEFEE-3B", "title": "Late fee per day, GSTR-3B with tax due", "value": 50, "unit": "INR per day", "source": "CGST Act s.47 as reduced by notification", "effective_from": "2018-01-01"}
-  ]
+    {
+      "id": "EWB-INTER",
+      "title": "E-way bill limit, inter-state",
+      "value": 50000,
+      "unit": "INR consignment value",
+      "source": "CGST Rules, Rule 138(1)",
+      "effective_from": "2018-04-01"
+    },
+    {
+      "id": "EWB-INTRA-KA",
+      "title": "E-way bill limit, within Karnataka",
+      "value": 50000,
+      "unit": "INR consignment value",
+      "source": "Karnataka state notification (verify current)",
+      "effective_from": "2018-04-01"
+    },
+    {
+      "id": "DUE-GSTR1",
+      "title": "GSTR-1 due day (monthly filer)",
+      "value": 11,
+      "unit": "day of next month",
+      "source": "CGST Act s.37 and notifications",
+      "effective_from": "2017-07-01"
+    },
+    {
+      "id": "GEN-GSTR2B",
+      "title": "GSTR-2B generated",
+      "value": 14,
+      "unit": "day of next month",
+      "source": "GSTN advisory",
+      "effective_from": "2020-08-01"
+    },
+    {
+      "id": "DUE-GSTR3B",
+      "title": "GSTR-3B due day (monthly filer)",
+      "value": 20,
+      "unit": "day of next month",
+      "source": "CGST Act s.39 and notifications",
+      "effective_from": "2017-07-01"
+    },
+    {
+      "id": "DUE-TDS",
+      "title": "TDS deposit due day",
+      "value": 7,
+      "unit": "day of next month",
+      "source": "Income-tax Rules, Rule 30",
+      "effective_from": "2010-04-01"
+    },
+    {
+      "id": "LATEFEE-3B",
+      "title": "Late fee per day, GSTR-3B with tax due",
+      "value": 50,
+      "unit": "INR per day",
+      "source": "CGST Act s.47 as reduced by notification",
+      "effective_from": "2018-01-01"
+    },
+    {
+      "id": "GST-RATES",
+      "title": "GST rates accepted by the arithmetic check (percent)",
+      "value": [
+        0,
+        0.25,
+        3,
+        5,
+        18,
+        40
+      ],
+      "unit": "percent of taxable value",
+      "source": "GST rate notifications after the September 2025 rate changes (verify current)",
+      "effective_from": "2025-09-22"
+    },
+    {
+      "id": "PRICE-ACCOUNTANT",
+      "title": "Accountant plan, per client per month (target price)",
+      "value": 99,
+      "unit": "INR",
+      "source": "Billbo business model, to be tested in field interviews",
+      "effective_from": "2026-11-16"
+    },
+    {
+      "id": "PRICE-PLUS",
+      "title": "Billbo Plus for owners, per month (target price)",
+      "value": 149,
+      "unit": "INR",
+      "source": "Billbo business model, to be tested in field interviews",
+      "effective_from": "2026-11-16"
+    }
+  ],
+  "notices": {
+    "DRC-01C": {
+      "title": "Difference between input credit claimed and credit available",
+      "meaning": "The GST system says you claimed more input credit in your GSTR-3B than your suppliers reported for you in GSTR-2B.",
+      "reply_days": 7,
+      "what_to_do": "Either pay back the extra credit with interest, or explain the difference with proof.",
+      "papers": [
+        "Purchase bills for the month",
+        "GSTR-2B statement for the month",
+        "GSTR-3B filed for the month",
+        "Messages or emails to suppliers who have not reported"
+      ],
+      "source": "CGST Rules, Rule 88D (verify current)"
+    },
+    "ASMT-10": {
+      "title": "Scrutiny notice: figures in your returns do not match",
+      "meaning": "A tax officer compared your returns with other data, such as e-way bills, and found a difference that needs an explanation.",
+      "reply_days": 30,
+      "what_to_do": "Reply with an explanation, or pay the difference if the officer is right.",
+      "papers": [
+        "GSTR-1 and GSTR-3B for the period",
+        "Sales register",
+        "E-way bills generated in the period",
+        "Bank statement for the period"
+      ],
+      "source": "CGST Act s.61 and Rule 99 (verify current)"
+    }
+  }
 }

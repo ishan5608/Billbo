@@ -23,16 +23,46 @@ The owner keeps using WhatsApp. Billbo's agents do the paperwork as it happens.
 
 An **orchestrator** routes messages, logs every decision, and escalates low-confidence items to the accountant.
 
-## Try the demo
+## Run the prototype
 
-The deterministic core already runs. No AI keys, no network, Python 3.9+ standard library only.
+A working prototype is in `prototype/`. It needs only Python 3.8+ (standard library, nothing to install).
 
 ```
-python demo/billbo_demo.py
-python -m unittest demo/test_billbo.py
+cd prototype
+python run.py
 ```
 
-It reads the rule cards in `rules/rule_cards.json` and synthetic data in `demo/data/`, then shows credit safe to claim, credit at risk with a supplier reminder draft, sales that need an e-way bill, and upcoming due dates. One test changes a single rule card and shows the behaviour change, which is how Billbo handles rule changes.
+Then open http://127.0.0.1:8000. There are three screens:
+
+| Screen | Who it is for | What you can do |
+|---|---|---|
+| Owner chat | The shop owner | Send sample bill photos, voice notes and notices; Billbo's agents reply |
+| Accountant dashboard | The accountant | See every client sorted, clear the review queue, download the filing-ready pack, see the Billbo fee |
+| Mock GST portal | The government side | Make a supplier report an invoice, generate an e-way bill, file a return (all simulated, all done by a person) |
+
+The home page has a 2-minute demo script. `python run.py --reset` reloads the demo data.
+
+**What is real:** the six agents, the orchestrator and its routing, the rule engine, credit matching, the Free / Plus plan limits, accountant billing and the audit trail.
+**What is simulated:** bill photos and voice notes are samples standing in for a vision and speech model, the chat stands in for WhatsApp, and the GST portal is a mock with synthetic data.
+
+Tests (16, including the rule that no agent code can file a return):
+
+```
+cd prototype
+python -m unittest discover -s tests
+```
+
+There is also a smaller command-line demo of just the rule engine: `python demo/billbo_demo.py`.
+
+## Business model in the prototype
+
+| Plan | Who pays | Target price | In the prototype |
+|---|---|---|---|
+| Free | Nobody | ₹0 | Bill capture, registers, due dates, safety warnings |
+| Accountant plan | The accountant | ₹99 per client per month | Dashboard, review queue, filing-ready pack |
+| Billbo Plus | The owner | ₹149 per month | Credit alerts and reminders, supplier scorecard, e-way drafts, notice explanations |
+
+Prices live in `rules/rule_cards.json` and are targets to test in field interviews.
 
 ## Architecture
 
@@ -65,9 +95,14 @@ Accountant dashboard (web) ◄── filing-ready pack ──► owner / account
 ## Repo layout
 
 ```
-demo/                working demo of the rule engine + tests + synthetic data
-rules/               rule cards (JSON)
+prototype/           working prototype: agents, server, three web screens, tests
+  billbo/agents/     intake, ledger, itc_guard, dispatch, returns, notice, orchestrator
+  billbo/            db, rules, plans, i18n, server
+  web/               owner chat, accountant dashboard, mock GST portal
+  data/              sample bills, voice notes, notices and seed data (all synthetic)
+rules/               rule cards (JSON): limits, due dates, GST rates, prices, notice explanations
+demo/                small command-line demo of the rule engine + tests
 docs/PLAN.md         hackathon plan
 SUBMISSION.md        Round 1 idea submission text
-(planned) apps/gateway, apps/dashboard, agents/, sandbox/
+Billbo_Deck.pdf      presentation deck
 ```

@@ -1,0 +1,46 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mock GST portal · Billbo</title><link rel="stylesheet" href="/style.css"></head><body>
+<main>
+<h1>Mock GST portal</h1>
+<p class="sub">A stand-in for the government systems, with synthetic data. This is where suppliers report invoices and where a person files. Billbo has no buttons here.</p>
+<p><span class="lbl">Taxpayer</span> <select id="owner"></select></p>
+<div class="grid g2">
+  <div class="card"><h3>Purchases and what suppliers have reported (GSTR-2B view)</h3><div id="p"></div></div>
+  <div>
+    <div class="card"><h3>E-way bills</h3><div id="e"></div></div>
+    <div class="card" style="margin-top:14px"><h3>File a return (simulated)</h3>
+      <p class="muted" id="sum"></p>
+      <p><input type="text" id="who" placeholder="Your name (the person filing)" maxlength="60">
+      <button data-rt="GSTR-1">File GSTR-1</button> <button data-rt="GSTR-3B">File GSTR-3B</button></p>
+      <div id="f"></div><p class="risk" id="err"></p></div>
+  </div>
+</div>
+</main>
+<script src="/common.js"></script><script>
+topbar("/portal");
+let owner = Number(qs("client") || 1);
+async function load() {
+  const os = await api("/api/owners");
+  $("#owner").innerHTML = os.map(o => `<option value="${o.id}" ${o.id === owner ? "selected" : ""}>${esc(o.business)}</option>`).join("");
+  const d = await api("/api/client?owner_id=" + owner), risk = Object.fromEntries(d.credit.issues.map(i => [i.bill_id, i]));
+  const posted = d.purchases.filter(b => b.status === "posted");
+  $("#p").innerHTML = posted.length ? `<table><thead><tr><th>Supplier</th><th>Invoice</th><th class="r">GST on bill</th><th>Supplier's report</th><th></th></tr></thead><tbody>${posted.map(b => {
+    const i = risk[b.id];
+    return `<tr><td>${esc(b.party)}</td><td>${esc(b.invoice)}</td><td class="r">${inr(b.gst)}</td><td>${i ? `<span class="pill warn">${esc(i.reason)}</span>` : '<span class="pill ok">Reported, matches</span>'}</td>
+      <td>${i ? `<button class="small" data-bill="${b.id}">Supplier reports this invoice</button>` : ""}</td></tr>`; }).join("")}</tbody></table>` : '<p class="muted">No purchases yet.</p>';
+  const ew = d.drafts.filter(x => x.kind === "eway");
+  $("#e").innerHTML = ew.length ? `<table><tbody>${ew.map(x => `<tr><td>${esc(x.payload.buyer)}<br><span class="muted">${inr(x.payload.value)} · ${x.payload.route === "inter" ? "other state" : "within state"} · vehicle ${esc(x.payload.vehicle || "not given yet")}</span></td>
+    <td>${x.status === "ready" ? `<button class="small" data-draft="${x.id}">Generate (simulated)</button>` : x.status === "generated_simulated" ? `<span class="pill ok">${esc(x.payload.simulated_number)}</span>` : '<span class="pill warn">Waiting for vehicle number</span>'}</td></tr>`).join("")}</tbody></table>` : '<p class="muted">No e-way bill drafts.</p>';
+  const s = d.summary;
+  $("#sum").textContent = `Billbo's draft for ${s.period}: GST collected ${inr(s.output_tax)}, credit safe to claim ${inr(s.itc_safe)}, payable ${inr(s.net_payable)}.` + (s.bills_waiting_review ? ` ${s.bills_waiting_review} bill(s) still need the accountant's review.` : "");
+  $("#f").innerHTML = d.filings.map(f => `<div><span class="pill ok">${esc(f.return_type)} filed</span> for ${esc(f.period)} by ${esc(f.filed_by)}</div>`).join("");
+  document.querySelectorAll("button[data-bill]").forEach(b => b.onclick = async () => { await api("/api/portal/supplier_report", { owner_id: owner, bill_id: Number(b.dataset.bill) }); load(); });
+  document.querySelectorAll("button[data-draft]").forEach(b => b.onclick = async () => { await api("/api/portal/eway", { draft_id: Number(b.dataset.draft) }); load(); });
+}
+document.querySelectorAll("button[data-rt]").forEach(b => b.onclick = async () => {
+  $("#err").textContent = "";
+  try { await api("/api/portal/file", { owner_id: owner, return_type: b.dataset.rt, filed_by: $("#who").value }); load(); } catch (e) { $("#err").textContent = e.message; }
+});
+$("#owner").onchange = e => { owner = Number(e.target.value); load(); };
+load();
+</script></body></html>
