@@ -103,6 +103,7 @@ prototype/           working prototype: agents, server, three web screens, tests
 rules/               rule cards (JSON): limits, due dates, GST rates, prices, notice explanations
 demo/                small command-line demo of the rule engine + tests
 docs/PLAN.md         hackathon plan
+docs/HANDOFF.md      start here if you are new to the project
 SUBMISSION.md        Round 1 idea submission text
 Billbo_Deck.pdf      presentation deck
 ```
