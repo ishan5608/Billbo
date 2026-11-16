@@ -1,0 +1,7 @@
+[
+  {"supplier": "Sri Lakshmi Traders", "gstin": "29ABCDE1234F1Z5", "invoice": "SLT/101", "taxable": 42000, "gst": 7560},
+  {"supplier": "Sri Lakshmi Traders", "gstin": "29ABCDE1234F1Z5", "invoice": "SLT/117", "taxable": 18500, "gst": 3330},
+  {"supplier": "Mahadev Plastics",    "gstin": "29PQRSX5678K1Z2", "invoice": "MP-2231",  "taxable": 34000, "gst": 6120},
+  {"supplier": "Mahadev Plastics",    "gstin": "29PQRSX5678K1Z2", "invoice": "MP-2260",  "taxable": 12000, "gst": 2160},
+  {"supplier": "Balaji Packaging",    "gstin": "27LMNOP4321Q1Z9", "invoice": "BP/88",    "taxable": 25000, "gst": 4500}
+]

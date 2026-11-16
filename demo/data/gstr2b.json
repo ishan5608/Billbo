@@ -1,0 +1,5 @@
+[
+  {"gstin": "29ABCDE1234F1Z5", "invoice": "SLT/101", "taxable": 42000, "gst": 7560},
+  {"gstin": "29ABCDE1234F1Z5", "invoice": "SLT/117", "taxable": 18500, "gst": 3330},
+  {"gstin": "27LMNOP4321Q1Z9", "invoice": "BP/88",   "taxable": 25000, "gst": 3000}
+]

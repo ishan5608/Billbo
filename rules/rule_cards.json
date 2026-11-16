@@ -1,0 +1,12 @@
+{
+  "_note": "Illustrative rule cards for the hackathon demo. Every card must be reviewed by a practising accountant before real use.",
+  "cards": [
+    {"id": "EWB-INTER", "title": "E-way bill limit, inter-state", "value": 50000, "unit": "INR consignment value", "source": "CGST Rules, Rule 138(1)", "effective_from": "2018-04-01"},
+    {"id": "EWB-INTRA-KA", "title": "E-way bill limit, within Karnataka", "value": 50000, "unit": "INR consignment value", "source": "Karnataka state notification (verify current)", "effective_from": "2018-04-01"},
+    {"id": "DUE-GSTR1", "title": "GSTR-1 due day (monthly filer)", "value": 11, "unit": "day of next month", "source": "CGST Act s.37 and notifications", "effective_from": "2017-07-01"},
+    {"id": "GEN-GSTR2B", "title": "GSTR-2B generated", "value": 14, "unit": "day of next month", "source": "GSTN advisory", "effective_from": "2020-08-01"},
+    {"id": "DUE-GSTR3B", "title": "GSTR-3B due day (monthly filer)", "value": 20, "unit": "day of next month", "source": "CGST Act s.39 and notifications", "effective_from": "2017-07-01"},
+    {"id": "DUE-TDS", "title": "TDS deposit due day", "value": 7, "unit": "day of next month", "source": "Income-tax Rules, Rule 30", "effective_from": "2010-04-01"},
+    {"id": "LATEFEE-3B", "title": "Late fee per day, GSTR-3B with tax due", "value": 50, "unit": "INR per day", "source": "CGST Act s.47 as reduced by notification", "effective_from": "2018-01-01"}
+  ]
+}

@@ -1,0 +1,5 @@
+[
+  {"buyer": "Hubli Hardware",   "invoice": "INV-501", "value": 38000, "route": "intra", "eway_bill": null},
+  {"buyer": "Pune Polymers",    "invoice": "INV-502", "value": 74500, "route": "inter", "eway_bill": null},
+  {"buyer": "Mysuru Mart",      "invoice": "INV-503", "value": 61000, "route": "intra", "eway_bill": "141009876543"}
+]
