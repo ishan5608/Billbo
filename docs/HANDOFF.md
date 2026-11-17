@@ -38,6 +38,11 @@ The claude.ai project "T4B" holds copies of the plan and submission text.
 5. Standard library only in the prototype, so it runs with plain Python and no installs.
 6. Synthetic data only.
 
+## Working agreement with Ishan
+- Commit changes on your own as the project is refined; don't wait to be asked. Push them too, so the GitHub repo stays current.
+- Commit only after the tests pass. Write clear commit messages.
+- Commits go under Ishan's name only (Ishan Ahirwar <ishan5608@users.noreply.github.com>). No co-author or session lines in commit messages.
+
 ## How to check your work
 ```
 cd prototype
