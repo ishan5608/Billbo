@@ -11,7 +11,8 @@ Billbo is team welovefrontshots' entry for Tech4Bharat (GAVS Hackathon 2026), th
 - 27 Dec: finale at Bangalore Palace
 
 ## Where everything is
-Local folder: `C:\Users\ITS Laptop\Desktop\Hackathon\T4B\billbo` (a git repo, branch `main`, not yet on GitHub).
+Local folder: `C:\Users\ITS Laptop\Desktop\Hackathon\T4B\billbo` (a git repo, branch `main`).
+GitHub: https://github.com/ishan5608/Billbo (public; renamed by Ishan, the local `origin` points here).
 
 | Path | What |
 |---|---|
@@ -52,7 +53,7 @@ Check both light and dark themes after any change to `prototype/web/`.
 
 ## Open items
 - The HackCulture form is not confirmed as filled and saved. Paste from `SUBMISSION.md`, upload `Billbo_Deck.pdf`, save before 20 Nov.
-- Repo is not on GitHub; push it and add the link to the form.
+- Keep GitHub up to date: push new local commits, and add https://github.com/ishan5608/Billbo to the form's links field.
 - Field interviews (3 owners, 1 accountant) to replace target numbers with real ones: prices, hours saved, clients per accountant.
 - Rule cards, GST rates and notice explanations are illustrative; an accountant must review them.
 - Numbers labelled "target" (Rs 99, Rs 149, "under 3 hours") are assumptions. Keep them labelled as targets.
